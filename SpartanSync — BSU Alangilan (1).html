@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SpartanSync — BSU Alangilan Campus Peer Utility</title>
+<meta name="description" content="Peer gear lending, tutoring, resource vault and campus chat for Batangas State University – The National Engineering University (Alangilan Campus).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23a6192e'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#f8fafc;--sf:#fff;--sf2:#f1f5f9;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--ac:#a6192e;--ach:#8c1426;--ok:#15803d;--wn:#b45309;--on:#fff;--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Noto Sans KR','Noto Sans JP','Noto Sans SC',sans-serif;box-sizing:border-box}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0b0f19;--sf:#141820;--sf2:#1e293b;--tx:#f8fafc;--mu:#94a3b8;--bd:#273449;--ok:#4ade80;--wn:#fbbf24}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 var(--sans);min-height:100%;display:flex;-webkit-font-smoothing:antialiased;padding-top:env(safe-area-inset-top,0px);overflow-wrap:anywhere}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+h1,h2,h3{margin:0}.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}.mu{color:var(--mu)}.sm{font-size:12px}
+#sidebar{width:248px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex:none;position:sticky;top:0;height:100vh}
+.brand{height:64px;padding:0 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.mark{width:28px;height:28px;background:var(--ac);color:var(--on);display:grid;place-items:center;font-weight:700}
+.brand b{font-size:16px;letter-spacing:-.02em}
+.campus{padding:12px 20px;border-bottom:1px solid var(--bd);font-size:12px;color:var(--mu)}
+.nav{flex:1;padding:12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
+.nb{border:0;background:0;padding:10px 12px;display:flex;justify-content:space-between;text-align:left;font-size:13px;font-weight:600;width:100%}
+.nb:hover{background:var(--sf2)}.nb.on{background:var(--ac);color:var(--on)}
+.foot{border-top:1px solid var(--bd);padding:12px;display:flex;flex-direction:column;gap:8px}
+.ubox{border:1px solid var(--bd);background:var(--sf2);padding:10px;display:flex;align-items:center;gap:10px;text-align:left;width:100%}
+.av{width:34px;height:34px;background:var(--tx);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+#shell{flex:1;min-width:0;display:flex;flex-direction:column}
+#top{min-height:64px;background:var(--sf);border-bottom:1px solid var(--bd);padding:8px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#top h1{font-size:17px}
+#main{flex:1;padding:24px;max-width:1180px;width:100%;margin:0 auto}
+.box{background:var(--sf);border:1px solid var(--bd);padding:20px;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--sf);border:1px solid var(--bd);margin:16px 0}
+.kpi{padding:16px;border-right:1px solid var(--bd)}.kpi:last-child{border:0}
+.kpi label{font-size:12px;color:var(--mu)}.kpi b{display:block;font-size:24px;font-family:var(--mono)}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.sb{justify-content:space-between}
+.btn{border:1px solid var(--bd);background:var(--sf);padding:8px 14px;font-size:12px;font-weight:600}
+.btn:hover{background:var(--sf2)}.btn.pri{background:var(--ac);border-color:var(--ac);color:var(--on)}.btn.pri:hover{background:var(--ach)}
+.btn.dk,.btn.sel{background:var(--tx);border-color:var(--tx);color:var(--bg)}
+.in{width:100%;border:1px solid var(--bd);background:var(--bg);padding:8px 12px;font-size:13px}
+.in:focus{outline:0;border-color:var(--ac);background:var(--sf)}
+.ok{color:var(--ok);font-weight:600;font-size:12px}.wn{color:var(--wn);font-weight:600;font-size:12px}.ac{color:var(--ac);font-weight:600;font-size:12px}
+.od{background:var(--ac);color:#fff!important;padding:1px 6px;animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:.55}}
+.dl>div{padding:12px 0;border-bottom:1px solid var(--bd)}.dl>div:last-child{border:0}
+.card{margin:0;display:flex;flex-direction:column;justify-content:space-between}
+.cf{margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)}
+.cw{display:grid;grid-template-columns:270px 1fr;background:var(--sf);border:1px solid var(--bd)}
+.cl{border-right:1px solid var(--bd);max-height:540px;overflow-y:auto}
+.ci{width:100%;border:0;border-bottom:1px solid var(--bd);background:0;padding:12px 14px;text-align:left}.ci.on{background:var(--sf2)}
+.cp{display:flex;flex-direction:column;height:540px;min-width:0}
+.cm{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:78%;padding:8px 12px;border:1px solid var(--bd);background:var(--sf2);align-self:flex-start}
+.msg.me{align-self:flex-end;background:var(--ac);border-color:var(--ac);color:var(--on)}
+.q{border-left:3px solid var(--mu);padding:2px 8px;margin-bottom:4px;font-size:11px;opacity:.85}
+.rx{font-size:11px;border:1px solid currentColor;padding:0 5px;margin-right:4px}
+.ma{margin-top:4px;display:flex;gap:2px;opacity:.85}.ma button{border:0;background:0;font-size:12px;padding:0 4px;color:inherit}
+.chips{padding:8px 12px;border-top:1px solid var(--bd);background:var(--bg);display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--bd);background:var(--sf);padding:4px 10px;font-size:11px;font-weight:600}.chip:hover{border-color:var(--ac);color:var(--ac)}
+#modal{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;place-items:center;padding:16px;z-index:40}#modal.on{display:grid}
+.mc{width:100%;max-width:700px;max-height:88vh;overflow-y:auto;background:var(--sf);border:1px solid var(--bd);padding:24px}
+#toast{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;font-size:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;max-width:92vw}#toast.on{opacity:1}
+#mnav{display:none}
+@media(max-width:760px){
+#sidebar{display:none}#main{padding:16px 14px calc(76px + env(safe-area-inset-bottom,0px))}#top{padding:8px 14px}.top-meta{display:none}
+.g2,.g4,.cw{grid-template-columns:1fr}.kpi{border-right:0;border-bottom:1px solid var(--bd)}.kpi:last-child{border:0}
+.cl{border-right:0;border-bottom:1px solid var(--bd);max-height:180px}.cp{height:480px}.msg{max-width:92%}
+#mnav{position:fixed;inset:auto 0 0 0;background:var(--sf);border-top:1px solid var(--bd);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom,0px)}
+#mnav button{flex:1;min-width:0;border:0;background:0;font-size:10px;font-weight:600;color:var(--mu);padding:8px 2px;height:56px;overflow:hidden;line-height:1.2}
+#mnav button.on{color:var(--ac)}}
+@media print{body *{visibility:hidden!important}#ps,#ps *{visibility:visible!important;color:#0f172a!important;background:#fff!important}#ps{position:fixed!important;inset:0!important;padding:24px!important;border:0!important}}
+</style>
+</head>
+<body>
+<aside id="sidebar" aria-label="Sidebar"></aside>
+<div id="shell"><header id="top"></header><main id="main"></main></div>
+<nav id="mnav" aria-label="Mobile navigation"></nav>
+<div id="modal" role="dialog" aria-modal="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<datalist id="codes"><option value="MATH 401"><option value="CpE 401"><option value="ENGG 402"><option value="CS 121"><option value="ARCH 211"></datalist>
+<script>
+'use strict';
+const KEY='spartansync_bsu_alangilan_v5',TK='spartansync_theme_v1',LK='spartansync_lang_v1',SK='spartansync_session_v1';
+const ls={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
+const ss={get:k=>{try{return sessionStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{sessionStorage.setItem(k,v)}catch{}}};
+
+/* ---------- i18n: 52 keys x 6 languages ---------- */
+const LANGS=[['en','English'],['tl','Filipino'],['es','Español'],['ko','한국어'],['ja','日本語'],['zh','中文']];
+const KEYS='nd,ng,nt,nv,nc,ns,login,logout,light,dark,greet,fg,ft,kg,kt,kv,kc,lend,post,upload,newmsg,borrow,approve,decline,ret,help,read,dl,print,save,saved,send,exp,imp,reset,savep,gate,Available,Pending,Borrowed,Open,Matched,close,srch,over,del,reply,lang,theme,bio,activity,none'.split(',');
+const RAW={
+en:'Dashboard|Urgent Gear|Peer Tutors & Study|Resource Vault|Campus Chat|Settings & Profile|Log In / Switch Account|Log Out|Light|Dark|Welcome back|Find Urgent Gear|Find Peer Tutor|Available Gear|Open Tutors / Study|Vault Guides|Unread Chats|+ Lend Gear|+ Post Study / Help|+ Upload Resource|+ New Chat|Request to Borrow|Approve|Decline|Mark Returned|I Can Help / Join Session|Read / Open|Download .txt Study Sheet|Print|Save|Saved|Send|Export JSON State|Import JSON|Reset Campus Data|Save Profile|Sign in to access SpartanSync|Available|Pending|Borrowed|Open|Matched|Close|Search...|OVERDUE|Delete|Reply|Language|Theme|Bio|Recent Campus Activity|Nothing here yet.',
+tl:'Dashboard|Gamit Pangklase|Tutor at Aral|Baul ng Aralin|Usapang Kampus|Mga Setting at Profile|Mag-Log In / Palit Account|Mag-Log Out|Maliwanag|Madilim|Maligayang pagbabalik|Maghanap ng Gamit|Maghanap ng Tutor|Magagamit na Gamit|Bukas na Tutor|Mga Gabay|Hindi Nabasa|+ Magpahiram|+ Mag-post ng Aral|+ Mag-upload|+ Bagong Chat|Hilinging Hiramin|Aprubahan|Tanggihan|Naibalik Na|Makakatulong Ako / Sasali|Buksan / Basahin|I-download ang .txt|I-print|I-save|Naka-save|Ipadala|I-export ang JSON|I-import ang JSON|I-reset ang Datos|I-save ang Profile|Mag-sign in upang magamit ang SpartanSync|Magagamit|Naghihintay|Hiniram|Bukas|Nai-match|Isara|Maghanap...|LAGPAS NA|Burahin|Sagutin|Wika|Tema|Bio|Kamakailang Aktibidad|Wala pa rito.',
+es:'Panel|Equipo Urgente|Tutores y Estudio|Archivo de Recursos|Chat del Campus|Ajustes y Perfil|Iniciar / Cambiar Cuenta|Cerrar Sesión|Claro|Oscuro|Bienvenido de nuevo|Buscar Equipo|Buscar Tutor|Equipo Disponible|Tutorías Abiertas|Guías|Chats sin Leer|+ Prestar Equipo|+ Publicar Estudio|+ Subir Recurso|+ Nuevo Chat|Solicitar Préstamo|Aprobar|Rechazar|Marcar Devuelto|Puedo Ayudar / Unirme|Abrir / Leer|Descargar .txt|Imprimir|Guardar|Guardado|Enviar|Exportar JSON|Importar JSON|Reiniciar Datos|Guardar Perfil|Inicia sesión para usar SpartanSync|Disponible|Pendiente|Prestado|Abierto|Emparejado|Cerrar|Buscar...|VENCIDO|Eliminar|Responder|Idioma|Tema|Biografía|Actividad Reciente|Nada por aquí aún.',
+ko:'대시보드|긴급 장비|튜터 및 스터디|자료 보관함|캠퍼스 채팅|설정 및 프로필|로그인 / 계정 전환|로그아웃|라이트|다크|환영합니다|장비 찾기|튜터 찾기|대여 가능 장비|모집 중 스터디|자료 수|안 읽은 채팅|+ 장비 빌려주기|+ 스터디 등록|+ 자료 업로드|+ 새 채팅|대여 요청|승인|거절|반납 완료|도움 주기 / 참여|열기 / 읽기|.txt 다운로드|인쇄|저장|저장됨|전송|JSON 내보내기|JSON 가져오기|데이터 초기화|프로필 저장|SpartanSync에 로그인하세요|대여 가능|대기 중|대여 중|모집 중|매칭됨|닫기|검색...|연체|삭제|답장|언어|테마|소개|최근 캠퍼스 활동|아직 없습니다.',
+ja:'ダッシュボード|緊急機材|チューター・学習|資料アーカイブ|キャンパスチャット|設定とプロフィール|ログイン / アカウント切替|ログアウト|ライト|ダーク|おかえりなさい|機材を探す|チューターを探す|貸出可能な機材|募集中|資料数|未読チャット|+ 機材を貸す|+ 学習を投稿|+ 資料を投稿|+ 新規チャット|借用リクエスト|承認|辞退|返却済みにする|支援する / 参加|開く / 読む|.txt をダウンロード|印刷|保存|保存済み|送信|JSON を書き出す|JSON を読み込む|データを初期化|プロフィール保存|SpartanSyncにログインしてください|貸出可|承認待ち|貸出中|募集中|マッチ済み|閉じる|検索...|期限超過|削除|返信|言語|テーマ|自己紹介|最近の活動|まだありません。',
+zh:'控制台|紧急器材|学伴辅导|资料库|校园聊天|设置与资料|登录 / 切换账号|退出登录|浅色|深色|欢迎回来|查找器材|查找辅导|可借器材|开放辅导|资料总数|未读聊天|+ 出借器材|+ 发布辅导|+ 上传资料|+ 新聊天|申请借用|批准|拒绝|标记归还|我能帮忙 / 加入|打开 / 阅读|下载 .txt|打印|收藏|已收藏|发送|导出 JSON|导入 JSON|重置数据|保存资料|请登录以使用 SpartanSync|可借|待批准|已借出|开放|已匹配|关闭|搜索...|已逾期|删除|回复|语言|主题|简介|最新动态|暂无内容。'};
+const D={};for(const l in RAW){const a=RAW[l].split('|');D[l]={};KEYS.forEach((k,i)=>D[l][k]=a[i])}
+let LANG=D[ls.get(LK)]?ls.get(LK):'en';
+const t=k=>(D[LANG]&&D[LANG][k])||D.en[k]||k;
+
+/* ---------- Campus domain ---------- */
+const COLS=['COE','CAFAD','CICS','CET'];
+const mk=(s,f)=>s.split(',').map(x=>{const[c,n]=x.split(':');return[c,f(n)+' ('+c+')']});
+const PROG={
+COE:mk('BSAE:Aerospace,BSAuE:Automotive,BSBioE:Biomedical,BSCerE:Ceramics,BSChE:Chemical,BSCE:Civil,BSCpE:Computer,BSEE:Electrical,BSECE:Electronics,BSFE:Food,BSGE:Geodetic,BSGeoE:Geological,BSIE:Industrial,BSICE:Instrumentation and Control,BSME:Mechanical,BSMtrE:Mechatronics,BSMetE:Metallurgical,BSNAME:Naval Architecture and Marine,BSPetE:Petroleum,BSSE:Sanitary,BSTSE:Transportation Systems',n=>'BS '+n+' Engineering'),
+CAFAD:[['BSArch','BS Architecture (BSArch)'],['BSID','BS Interior Design (BSID)'],['BFAD-VC','Bachelor of Fine Arts and Design major in Visual Communication (BFAD-VC)']],
+CICS:[['BSCS','BS Computer Science (BSCS)'],['BSIT','BS Information Technology (BSIT)']],
+CET:mk('BAET:Automotive,BCET:Civil,BCompET:Computer,BDET:Drafting,BEET:Electrical,BElexET:Electronics,BFET:Food,BICET:Instrumentation and Control,BMET:Mechanical,BMtrET:Mechatronics,BWFET:Welding and Fabrication',n=>'Bachelor of '+n+' Engineering Technology')};
+const COLLEGES_AND_PROGRAMS=PROG;
+const ZONES=['COE Building Lobby','CICS Building','CAFAD Building / Studios','CET Building','STEAM Library','STEER Hub (FabLab / Open Space)','Main Canteen','Gate 1','Gate 2'];
+const CHIPS=['I’m at STEAM Library','Waiting at COE Lobby','Item returned, thank you!','Heading to STEER Hub'];
+const YEARS=['1st Year','2nd Year','3rd Year','4th Year','5th Year'];
+const EMO=['👍','❤️','😂'];
+
+function seed(){
+const n=Date.now(),H=36e5;
+const P=(id,name,sr,college,program,year,nat,bio,help)=>({id,name,sr,pin:'1234',college,program,year,nat,bio,help});
+return{version:5,lastUser:'stu-mika',
+profiles:[
+P('stu-mika','Mika Reyes','23-04192','COE','BSCpE','2nd Year','Batangas, PH','Loves embedded systems.','CpE 401, Logic Circuits'),
+P('stu-ana','Ana Cruz','22-01845','CICS','BSCS','3rd Year','Lipa, PH','Algorithms tutor.','CS 121, MATH 401'),
+P('stu-marco','Marco Villanueva','23-06118','CAFAD','BSArch','3rd Year','Batangas, PH','Studio rat.','ARCH 211, AutoCAD'),
+P('stu-lea','Lea Santos','24-05521','CET','BCompET','1st Year','Tanauan, PH','Bench lab regular.','Circuit Bench, Multimeter'),
+P('stu-minjun','Min-jun Kim','24-08812','COE','BSEE','2nd Year','Seoul, KR','Exchange student.','AC Circuits, MATLAB'),
+P('stu-kenji','Kenji Sato','23-09204','COE','BSMtrE','3rd Year','Osaka, JP','Exchange student.','PLC Ladder, SolidWorks')],
+gear:[
+{id:'g1',name:'Casio fx-991ES Plus',college:'COE',code:'MATH 401',urg:'Needed < 1 hr',ownerId:'stu-minjun',borrowerId:null,zone:'COE Building Lobby',cond:'BSU ID check on handoff.',st:'Available',dur:4,dueAt:0},
+{id:'g2',name:'Arduino Uno R3 + Breadboard Kit',college:'COE',code:'CpE 401',urg:'For Next Lab',ownerId:'stu-mika',borrowerId:'stu-lea',zone:'STEER Hub (FabLab / Open Space)',cond:'Includes 40 jumper wires.',st:'Pending',dur:24,dueAt:0},
+{id:'g3',name:'Digital Multimeter (True RMS)',college:'CET',code:'BCompET LAB',urg:'For Next Lab',ownerId:'stu-lea',borrowerId:null,zone:'CET Building',cond:'Confirm dial setting before probing.',st:'Available',dur:12,dueAt:0},
+{id:'g4',name:'T-Square (36") & Staedtler Technical Pens',college:'CAFAD',code:'ARCH 211',urg:'Needed < 1 hr',ownerId:'stu-marco',borrowerId:null,zone:'CAFAD Building / Studios',cond:'Recap pens tightly.',st:'Available',dur:6,dueAt:0},
+{id:'g5',name:'USB-C 65W Laptop Charger',college:'CICS',code:'CS 121',urg:'Needed < 1 hr',ownerId:'stu-ana',borrowerId:'stu-mika',zone:'CICS Building',cond:'Same-day return before 6 PM.',st:'Borrowed',dur:4,dueAt:n+2*H+45*6e4}],
+tutors:[
+{id:'t1',kind:'1-on-1 Urgent Help',college:'COE',code:'MATH 401',subj:'Differential Calculus — Related Rates',desc:'Quiz at 4 PM. Need a 20-minute walkthrough on cone/cylinder rate equations.',authorId:'stu-minjun',sched:'Today 2:30 PM',zone:'COE Building Lobby',st:'Open',joined:[]},
+{id:'t2',kind:'Group Study',college:'CICS',code:'CS 121',subj:'Data Structures — AVL Trees & BFS/DFS',desc:'Whiteboard dry-run before Friday practicals.',authorId:'stu-ana',sched:'Thu 4:00 PM',zone:'STEAM Library',st:'Matched',joined:['stu-mika']},
+{id:'t3',kind:'1-on-1 Urgent Help',college:'CAFAD',code:'ARCH 211',subj:'Architectural Design — 2-Point Perspective',desc:'Checking vanishing point alignment on a 20x30 plate.',authorId:'stu-marco',sched:'Today 5:00 PM',zone:'CAFAD Building / Studios',st:'Open',joined:[]},
+{id:'t4',kind:'Group Study',college:'COE',code:'ENGG 402',subj:'Engineering Drawing — Orthographic Views',desc:'Third-angle projection practice with CpE and CET students.',authorId:'stu-mika',sched:'Fri 1:30 PM',zone:'STEER Hub (FabLab / Open Space)',st:'Open',joined:[]}],
+vault:[
+{id:'v1',college:'COE',code:'MATH 401',type:'Formula Sheet',title:'Derivative & Related Rates Formula Sheet',authorId:'stu-minjun',sum:'Chain rule, implicit differentiation and the 4-step related rates protocol.',body:'MATH 401 FORMULA SHEET — BSU ALANGILAN (COE)\n\n1. Power rule: d/dx[u^n] = n·u^(n-1)·(du/dx)\n2. Inverse tangent: d/dx[arctan u] = (du/dx)/(1+u²)\n3. Implicit differentiation: differentiate both sides, then solve for dy/dx.\n\nRELATED RATES — FOUR STEPS\nSketch and label → write an equation relating the variables → differentiate with respect to t → substitute known values only AFTER differentiating.\n\nCommon trap: substituting a changing quantity (like radius) before differentiating.',url:'https://tutorial.math.lamar.edu/Classes/CalcI/CalcI.aspx',up:['stu-mika'],saved:['stu-mika']},
+{id:'v2',college:'COE',code:'CpE 401',type:'Lab Manual',title:'C Pointers, Arrays & File I/O Lab Notes',authorId:'stu-mika',sum:'Pointer arithmetic, malloc/free safety and fopen modes.',body:'CpE 401 LAB NOTES — BSU ALANGILAN (COE)\n\nPOINTERS\nint x = 42; int *p = &x; *p = 99;  /* x is now 99 */\nArray names decay to pointers: a[i] is the same as *(a+i).\n\nHEAP SAFETY\nAlways check malloc() != NULL, pair every malloc with one free(), and set the pointer to NULL afterwards.\n\nFILE I/O\n"r" read, "w" truncate+write, "a" append. Always fclose() and check fopen() for NULL.',up:['stu-minjun'],saved:[]},
+{id:'v3',college:'CICS',code:'CS 121',type:'Reviewer',title:'Data Structures Big-O & AVL Rotations',authorId:'stu-ana',sum:'Complexity chart plus LL/RR/LR/RL balancing rules.',body:'CS 121 REVIEWER — BSU ALANGILAN (CICS)\n\nCOMPLEXITY\nAVL search/insert/delete: O(log n). BFS/DFS: O(V+E). Array index: O(1).\n\nAVL ROTATIONS\nLL imbalance → single right rotation.\nRR imbalance → single left rotation.\nLR imbalance → rotate left on child, then right on node.\nRL imbalance → rotate right on child, then left on node.\n\nBalance factor = height(left) − height(right); valid values are −1, 0, +1.',up:['stu-mika'],saved:['stu-mika']},
+{id:'v4',college:'CAFAD',code:'ARCH 211',type:'Notes',title:'Perspective & Pen Line-Weight Plate Guide',authorId:'stu-marco',sum:'0.1–0.6 mm pen hierarchy and station point rules.',body:'ARCH 211 PLATE GUIDE — BSU ALANGILAN (CAFAD)\n\nLINE WEIGHTS\n0.60 mm: cut walls\n0.40 mm: mass edges\n0.25 mm: details and furniture\n0.10 mm: grid and construction lines\n\n2-POINT PERSPECTIVE\nPlace the horizon line first, set vanishing points far apart on it, and keep verticals truly vertical. Place the station point so the viewing angle stays under 30° for the main subject.',up:[],saved:[]}],
+threads:[
+{id:'c1',ctx:'USB-C 65W Laptop Charger · CICS Building',ids:['stu-mika','stu-ana'],unread:{'stu-mika':1},msgs:[{id:'m1',sid:'stu-ana',txt:'Ping me when you’re at STEAM Library or CICS Building.',ts:n-9e5,rx:{},re:null}]},
+{id:'c2',ctx:'Arduino Uno R3 + Breadboard Kit · STEER Hub',ids:['stu-mika','stu-lea'],unread:{'stu-mika':1},msgs:[{id:'m2',sid:'stu-lea',txt:'Hi Mika! I requested your Arduino kit for our CET lab tomorrow. Can we meet at STEER Hub?',ts:n-6e5,rx:{},re:null}]}]};}
+
+const A=x=>Array.isArray(x)?x:[];
+function clean(p){
+if(!p||typeof p!=='object'||!A(p.profiles).length)return null;
+p.gear=A(p.gear).filter(g=>g&&g.id);p.tutors=A(p.tutors).filter(x=>x&&x.id);p.vault=A(p.vault).filter(v=>v&&v.id);p.threads=A(p.threads).filter(x=>x&&x.id&&A(x.ids).length===2);
+p.profiles=p.profiles.filter(x=>x&&x.id);
+p.gear.forEach(g=>{g.dur=Number(g.dur)||4;g.dueAt=Number(g.dueAt)||0});
+p.tutors.forEach(x=>x.joined=A(x.joined));p.vault.forEach(v=>{v.up=A(v.up);v.saved=A(v.saved)});
+p.threads.forEach(x=>{x.msgs=A(x.msgs);x.unread=x.unread&&typeof x.unread==='object'?x.unread:{}});
+p.version=5;return p.profiles.length?p:null}
+
+let S=clean((()=>{try{return JSON.parse(ls.get(KEY))}catch{return null}})())||seed();
+const sv=ss.get(SK);let UID=sv==='none'?null:(sv||S.lastUser||null);
+let TH=ls.get(TK)||((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');
+let UI={v:'dashboard',col:'All',st:'All',q:'',tid:null,modal:false,tab:'switch',reader:null,peer:false,form:null,reply:null,draft:'',rc:0};
+
+const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const save=()=>ls.set(KEY,JSON.stringify(S));
+const prof=id=>S.profiles.find(p=>p.id===id);
+const me=()=>prof(UID)||null;
+const $=id=>document.getElementById(id);
+const val=id=>(($(id)||{}).value||'').trim();
+const SRX=/^\d{2}-\d{5}$/;
+function setUser(id){UID=id;ss.set(SK,id||'none');S.lastUser=id;save()}
+function toast(m){const el=$('toast');el.textContent=m;el.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>el.className='',2600)}
+function applyTheme(){document.documentElement.dataset.theme=TH;ls.set(TK,TH)}
+const safeUrl=u=>{try{const p=new URL(String(u||'').trim());return/^https?:$/.test(p.protocol)?p.toString():null}catch{return null}};
+const P2=n=>String(n).padStart(2,'0');
+function hms(d){const s=Math.floor(Math.abs(d)/1e3);return`${P2(Math.floor(s/3600))}:${P2(Math.floor(s%3600/60))}:${P2(s%60)}`}
+function timer(due){const d=due-Date.now();return`<span class="mono ac ${d<=0?'od':''}" data-due="${Number(due)}">${d<=0?E(t('over'))+' +':''}${hms(d)}</span>`}
+const initials=n=>String(n).split(/\s+/).map(x=>x[0]||'').join('').slice(0,2).toUpperCase();
+const hit=(...f)=>{const q=UI.q.trim().toLowerCase();return!q||f.some(x=>String(x||'').toLowerCase().includes(q))};
+const progOpts=(c,sel)=>(PROG[c]||PROG.COE).map(([k,l])=>`<option value="${E(k)}" ${k===sel?'selected':''}>${E(l)}</option>`).join('');
+const colOpts=sel=>COLS.map(c=>`<option ${c===sel?'selected':''}>${c}</option>`).join('');
+const zoneOpts=()=>ZONES.map(z=>`<option>${E(z)}</option>`).join('');
+const colBar=()=>`<div class="row">${['All',...COLS].map(c=>`<button class="btn ${UI.col===c?'pri':''}" data-act="col" data-id="${c}">${c}</button>`).join('')}</div>`;
+const stCls=s=>s==='Available'||s==='Open'?'ok':s==='Pending'?'wn':'ac';
+
+function dlBlob(b,n){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+
+/* ---------- Threads ---------- */
+function thread(peer,ctx){const u=me();if(!u||peer===u.id||!prof(peer))return null;
+let th=S.threads.find(x=>x.ids.includes(u.id)&&x.ids.includes(peer));
+if(!th){th={id:'c'+Date.now(),ctx:ctx||'Direct Campus Chat',ids:[u.id,peer],unread:{},msgs:[]};S.threads.unshift(th)}else if(ctx)th.ctx=ctx;return th}
+function post(th,txt,re){const u=me(),o=th.ids.find(i=>i!==u.id);
+th.msgs.push({id:'m'+Date.now()+Math.random().toString(36).slice(2,5),sid:u.id,txt,ts:Date.now(),rx:{},re:re||null});
+th.unread[o]=(th.unread[o]||0)+1}
+
+/* ---------- Views ---------- */
+function gearList(){const u=me();
+const L=S.gear.filter(g=>(UI.col==='All'||g.college===UI.col)&&(UI.st==='All'||g.st===UI.st)&&hit(g.name,g.code,g.cond,g.college));
+return L.length?L.map(g=>{const own=g.ownerId===u.id,ow=prof(g.ownerId)||{},br=prof(g.borrowerId);
+let act='';
+if(own)act=g.st==='Pending'?`<div class="row"><button class="btn pri" data-act="approve" data-id="${E(g.id)}">${E(t('approve'))}</button><button class="btn" data-act="decline" data-id="${E(g.id)}">${E(t('decline'))}</button></div>`:g.st==='Borrowed'?`<button class="btn" data-act="ret" data-id="${E(g.id)}">${E(t('ret'))}</button>`:`<div class="row sb"><span class="sm mu">Max ${g.dur}h</span><button class="btn" data-act="gdel" data-id="${E(g.id)}">${E(t('del'))}</button></div>`;
+else act=g.st==='Available'?`<button class="btn dk" data-act="borrow" data-id="${E(g.id)}">${E(t('borrow'))}</button>`:`<span class="sm mu">${E(t(g.st))}</span>`;
+return`<div class="box card"><div><div class="row sb"><span class="mono sm mu"><b>${E(g.college)}</b>${g.code?' · '+E(g.code):''} · ${E(g.urg)}</span><span class="${stCls(g.st)}">${E(t(g.st))}</span></div>
+<h3 style="margin:8px 0 4px">${E(g.name)}</h3><p class="mu" style="margin:0;font-size:13px">${E(g.cond)}</p>
+<p class="sm mu" style="margin:10px 0 0"><b>${E(ow.name)}</b> <span class="mono">(${E(ow.sr)})</span> · ${E(g.zone)}</p>
+${g.st==='Borrowed'?`<div class="row sb cf"><span class="sm">${E(br&&br.name)}</span>${timer(g.dueAt)}</div>`:''}
+${g.st==='Pending'&&br?`<div class="cf wn">${E(br.name)} (${E(br.sr)})</div>`:''}</div><div class="cf">${act}</div></div>`}).join(''):`<p class="mu">${E(t('none'))}</p>`}
+
+function tutorList(){const u=me();
+const L=S.tutors.filter(x=>(UI.col==='All'||x.college===UI.col)&&hit(x.code,x.subj,x.desc,x.kind));
+return L.length?L.map(x=>{const ow=prof(x.authorId)||{},own=x.authorId===u.id,joined=x.joined.includes(u.id),grp=x.kind==='Group Study';
+const act=own?`<span class="sm mu">${x.joined.length} ✓</span>`:joined?`<span class="ok">${E(t('Matched'))}</span>`:(x.st==='Open'||grp)?`<button class="btn dk" data-act="help" data-id="${E(x.id)}">${E(t('help'))}</button>`:`<span class="sm mu">${E(t(x.st))}</span>`;
+return`<div class="box card"><div><div class="row sb"><span class="mono sm mu"><b>${E(x.college)}</b> · ${E(x.code)} · ${E(x.kind)}</span><span class="${stCls(x.st)}">${E(t(x.st))}</span></div>
+<h3 style="margin:8px 0 4px">${E(x.subj)}</h3><p class="mu" style="margin:0;font-size:13px">${E(x.desc)}</p></div>
+<div class="row sb cf"><div class="sm mu"><b>${E(ow.name)}</b> (${E(ow.sr)})<br>${E(x.sched)} · ${E(x.zone)}</div>${act}</div></div>`}).join(''):`<p class="mu">${E(t('none'))}</p>`}
+
+function vaultList(){const u=me();
+const L=S.vault.filter(v=>(UI.col==='All'||v.college===UI.col)&&hit(v.code,v.title,v.type,v.sum));
+return L.length?L.map(v=>`<div class="box card"><div><div class="row sb"><span class="mono sm mu"><b>${E(v.college)}</b> · ${E(v.code)} · ${E(v.type)}</span><span class="sm mu">${E((prof(v.authorId)||{}).name)}</span></div>
+<h3 style="margin:8px 0 4px">${E(v.title)}</h3><p class="mu" style="margin:0;font-size:13px">${E(v.sum)}</p></div>
+<div class="row cf"><button class="btn dk" data-act="read" data-id="${E(v.id)}">${E(t('read'))}</button>
+<button class="btn ${v.up.includes(u.id)?'pri':''}" data-act="up" data-id="${E(v.id)}">▲ ${v.up.length}</button>
+<button class="btn ${v.saved.includes(u.id)?'pri':''}" data-act="bm" data-id="${E(v.id)}">${E(v.saved.includes(u.id)?t('saved'):t('save'))}</button></div></div>`).join(''):`<p class="mu">${E(t('none'))}</p>`}
+
+const toolbar=(formKey,label,ph)=>`<div class="box"><div class="row sb">${colBar()}<div class="row" style="flex:1;justify-content:flex-end"><input class="in" id="srch" style="max-width:260px" value="${E(UI.q)}" placeholder="${E(ph||t('srch'))}" aria-label="${E(t('srch'))}" autocomplete="off"><button class="btn pri" data-act="form" data-id="${formKey}">${E(label)}</button></div></div>
+${formKey==='gear'?`<div class="row cf">${['All','Available','Pending','Borrowed'].map(s=>`<button class="btn ${UI.st===s?'sel':''}" data-act="st" data-id="${s}">${E(s==='All'?'All':t(s))}</button>`).join('')}</div>`:''}</div>`;
+const fw=(k,inner)=>`<div class="box" id="form-${k}" style="display:${UI.form===k?'block':'none'}">${inner}</div>`;
+
+const VIEW={
+dashboard(u){
+const mine=S.gear.filter(g=>g.st!=='Available'&&(g.ownerId===u.id||g.borrowerId===u.id));
+const ses=S.tutors.filter(x=>x.authorId===u.id||x.joined.includes(u.id));
+const act=[...S.gear.slice(0,2).map(g=>[g.college,'⇄ '+g.name,g.zone]),...S.tutors.slice(0,2).map(x=>[x.college,'✎ '+x.code+' · '+x.subj,x.sched]),...S.vault.slice(0,1).map(v=>[v.college,'▤ '+v.title,v.code])];
+const unread=S.threads.filter(x=>x.ids.includes(u.id)).reduce((a,x)=>a+(x.unread[u.id]||0),0);
+return`<div class="box"><h2>${E(t('greet'))}, ${E(u.name.split(' ')[0])}</h2>
+<p class="mu" style="margin:4px 0 0"><span class="mono ac">${E(u.college)}</span> · ${E(u.program)} · ${E(u.year)} · <span class="mono">${E(u.sr)}</span></p>
+<p class="mu" style="margin:14px 0 8px">What do you need help with or need to borrow right now?</p>
+<div class="row"><input class="in" id="dash-q" style="flex:1;min-width:200px" placeholder="Casio fx-991, MATH 401, CpE 401, ARCH 211..." aria-label="Search"><button class="btn" data-act="dgear">${E(t('fg'))}</button><button class="btn pri" data-act="dtutor">${E(t('ft'))}</button></div></div>
+<div class="g4"><div class="kpi"><label>${E(t('kg'))}</label><b>${S.gear.filter(g=>g.st==='Available').length}</b></div><div class="kpi"><label>${E(t('kt'))}</label><b>${S.tutors.filter(x=>x.st==='Open').length}</b></div><div class="kpi"><label>${E(t('kv'))}</label><b>${S.vault.length}</b></div><div class="kpi"><label>${E(t('kc'))}</label><b class="ac" style="font-size:24px">${unread}</b></div></div>
+<div class="g2"><div class="box"><h3>${E(t('ng'))}</h3><div class="dl">${mine.length?mine.map(g=>`<div class="row sb"><div><b>${E(g.name)}</b><div class="sm mu">${E(g.ownerId===u.id?(prof(g.borrowerId)||{}).name:g.zone)}</div></div>${g.st==='Borrowed'?timer(g.dueAt):g.ownerId===u.id?`<button class="btn pri" data-act="approve" data-id="${E(g.id)}">${E(t('approve'))}</button>`:`<span class="wn">${E(t('Pending'))}</span>`}</div>`).join(''):`<p class="mu">${E(t('none'))}</p>`}</div></div>
+<div class="box"><h3>${E(t('nt'))}</h3><div class="dl">${ses.length?ses.map(x=>`<div class="row sb"><div><span class="mono sm mu">${E(x.college)} · ${E(x.code)}</span><div><b>${E(x.subj)}</b></div><div class="sm mu">${E(x.sched)} · ${E(x.zone)}</div></div><span class="${stCls(x.st)}">${E(t(x.st))}</span></div>`).join(''):`<p class="mu">${E(t('none'))}</p>`}</div></div></div>
+<div class="box"><h3>${E(t('activity'))}</h3><div class="dl">${act.map(a=>`<div class="row sb"><span><span class="mono ac sm">${E(a[0])}</span> ${E(a[1])}</span><span class="sm mu">${E(a[2])}</span></div>`).join('')}</div></div>`},
+gear(u){return toolbar('gear',t('lend'),t('srch'))+fw('gear',`<h3 style="margin-bottom:12px">${E(t('lend'))}</h3><div class="g2">
+<input class="in" id="gf-name" placeholder="Item name (e.g. Digital Multimeter)" maxlength="80"><select class="in" id="gf-col">${colOpts(u.college)}</select>
+<input class="in mono" id="gf-code" list="codes" placeholder="Subject code (e.g. CpE 401)" maxlength="20"><select class="in" id="gf-urg"><option>Needed &lt; 1 hr</option><option>For Next Lab</option><option>Whole Day</option></select>
+<input class="in mono" id="gf-dur" type="number" min="1" max="72" value="4" aria-label="Duration (hours)" placeholder="Duration (hours)"><select class="in" id="gf-zone">${zoneOpts()}</select></div>
+<input class="in" id="gf-cond" style="margin-top:12px" placeholder="Condition / notes" maxlength="160"><div style="margin-top:12px"><button class="btn pri" data-act="gsave">${E(t('lend'))}</button></div>`)+`<div class="g2" id="results">${gearList()}</div>`},
+tutors(u){return toolbar('tutor',t('post'),'MATH 401, CpE 401, ENGG 402, CS 121...')+fw('tutor',`<h3 style="margin-bottom:12px">${E(t('post'))}</h3><div class="g2">
+<select class="in" id="tf-kind"><option>1-on-1 Urgent Help</option><option>Group Study</option></select><select class="in" id="tf-col">${colOpts(u.college)}</select>
+<input class="in mono" id="tf-code" list="codes" placeholder="Subject code" maxlength="20"><input class="in" id="tf-subj" placeholder="Topic" maxlength="100">
+<input class="in" id="tf-sched" placeholder="Schedule (e.g. Today 4:00 PM)" maxlength="40"><select class="in" id="tf-zone"><option>STEAM Library</option><option>STEER Hub (FabLab / Open Space)</option><option>Online</option>${ZONES.filter(z=>!/STEAM|STEER/.test(z)).map(z=>`<option>${E(z)}</option>`).join('')}</select></div>
+<textarea class="in" id="tf-desc" rows="2" style="margin-top:12px" placeholder="Details..." maxlength="300"></textarea><div style="margin-top:12px"><button class="btn pri" data-act="tsave">${E(t('post'))}</button></div>`)+`<div class="g2" id="results">${tutorList()}</div>`},
+vault(u){return toolbar('vault',t('upload'),'Notes, Lab Manual, Formula Sheet...')+fw('vault',`<h3 style="margin-bottom:12px">${E(t('upload'))}</h3><div class="g2">
+<select class="in" id="vf-col">${colOpts(u.college)}</select><input class="in mono" id="vf-code" list="codes" placeholder="Subject code" maxlength="20">
+<select class="in" id="vf-type"><option>Notes</option><option>Lab Manual</option><option>Formula Sheet</option><option>Reviewer</option></select><input class="in" id="vf-title" placeholder="Title" maxlength="100">
+<input class="in" id="vf-sum" placeholder="One-line summary" maxlength="160"><input class="in mono" id="vf-url" placeholder="Optional link (https://...)" maxlength="300"></div>
+<textarea class="in mono" id="vf-body" rows="6" style="margin-top:12px" placeholder="Study sheet content (plain text / Markdown)..." maxlength="20000"></textarea><div style="margin-top:12px"><button class="btn pri" data-act="vsave">${E(t('upload'))}</button></div>`)+`<div class="g2" id="results">${vaultList()}</div>`},
+chat(u){
+const my=S.threads.filter(x=>x.ids.includes(u.id));const cur=my.find(x=>x.id===UI.tid)||my[0]||null;
+if(cur&&cur.unread[u.id]){cur.unread[u.id]=0;save()}UI.tid=cur?cur.id:null;
+const other=th=>prof(th.ids.find(i=>i!==u.id))||{name:'Peer',college:''};
+const rp=UI.reply!=null&&cur&&cur.msgs[UI.reply];
+return`<div class="box row sb"><b>${E(t('nc'))}</b><button class="btn pri" data-act="peer">${E(t('newmsg'))}</button></div>
+${UI.peer?`<div class="box"><div class="row">${S.profiles.filter(p=>p.id!==u.id).map(p=>`<button class="btn" data-act="newth" data-id="${E(p.id)}">${E(p.name)} (${E(p.college)})</button>`).join('')}</div></div>`:''}
+<div class="cw"><div class="cl">${my.length?my.map(th=>{const o=other(th);return`<button class="ci ${cur&&cur.id===th.id?'on':''}" data-act="th" data-id="${E(th.id)}"><div class="row sb"><b>${E(o.name)} (${E(o.college)})</b>${th.unread[u.id]?`<span class="mono ac">${th.unread[u.id]}</span>`:''}</div><div class="mono sm mu">${E(th.ctx)}</div></button>`}).join(''):`<p class="mu" style="padding:16px">${E(t('none'))}</p>`}</div>
+<div class="cp">${cur?`<div style="padding:12px 16px;border-bottom:1px solid var(--bd)"><b>${E(other(cur).name)}</b><div class="mono sm mu">${E(cur.ctx)}</div></div>
+<div class="cm" id="msgs">${cur.msgs.map((m,i)=>{const mine=m.sid===u.id,rx=m.rx&&typeof m.rx==='object'?Object.entries(m.rx).filter(([,a])=>A(a).length):[];
+return`<div class="msg ${mine?'me':''}"><div class="sm" style="opacity:.75">${mine?'You':E((prof(m.sid)||{}).name)} · ${E(new Date(Number(m.ts)||0).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}))}</div>
+${m.re?`<div class="q"><b>${E(m.re.n)}</b>: ${E(m.re.t)}</div>`:''}${E(m.txt)}
+<div class="ma">${rx.map(([em,a])=>`<span class="rx">${E(em)} ${A(a).length}</span>`).join('')}<button data-act="rp" data-id="${i}" aria-label="${E(t('reply'))}" title="${E(t('reply'))}">↩</button>${EMO.map(em=>`<button data-act="rx" data-id="${i}" data-em="${em}">${em}</button>`).join('')}</div></div>`}).join('')}</div>
+<div class="chips">${CHIPS.map(c=>`<button class="chip" data-act="chip" data-id="${E(c)}">${E(c)}</button>`).join('')}</div>
+${rp?`<div class="row sb sm mu" style="padding:6px 12px;border-top:1px solid var(--bd)"><span>↩ ${E(rp.txt.slice(0,80))}</span><button class="btn" data-act="rpx">✕</button></div>`:''}
+<div class="row" style="padding:10px;border-top:1px solid var(--bd);flex-wrap:nowrap"><input class="in" id="chat-in" style="flex:1" value="${E(UI.draft)}" placeholder="Write a message..." maxlength="500" autocomplete="off"><button class="btn pri" data-act="send">${E(t('send'))}</button></div>`:`<p class="mu" style="padding:24px">${E(t('none'))}</p>`}</div></div>`},
+settings(u){return`<div class="box"><h3 style="margin-bottom:12px">${E(t('ns'))}</h3><div class="g2">
+<input class="in" id="s-name" value="${E(u.name)}" aria-label="Full Name" maxlength="60"><input class="in mono" id="s-sr" value="${E(u.sr)}" aria-label="SR-Code" maxlength="8">
+<select class="in" id="s-col" aria-label="College">${colOpts(u.college)}</select><select class="in" id="s-prog" aria-label="Program">${progOpts(u.college,u.program)}</select>
+<select class="in" id="s-yr" aria-label="Year">${YEARS.map(y=>`<option ${y===u.year?'selected':''}>${y}</option>`).join('')}</select><input class="in" id="s-help" value="${E(u.help||'')}" placeholder="Skills / subjects" maxlength="100"></div>
+<textarea class="in" id="s-bio" rows="2" style="margin-top:12px" placeholder="${E(t('bio'))}" maxlength="200">${E(u.bio||'')}</textarea><div style="margin-top:12px"><button class="btn pri" data-act="setsave">${E(t('savep'))}</button></div></div>
+<div class="box"><h3 style="margin-bottom:10px">${E(t('lang'))}</h3><div class="row">${LANGS.map(([c,l])=>`<button class="btn ${LANG===c?'pri':''}" data-act="lang" data-id="${c}">${l}</button>`).join('')}</div>
+<h3 style="margin:18px 0 10px">${E(t('theme'))}</h3><div class="row"><button class="btn ${TH==='light'?'pri':''}" data-act="settheme" data-id="light">${E(t('light'))}</button><button class="btn ${TH==='dark'?'pri':''}" data-act="settheme" data-id="dark">${E(t('dark'))}</button></div></div>
+<div class="box"><div class="row"><button class="btn" data-act="export">${E(t('exp'))}</button><label class="btn" tabindex="0">${E(t('imp'))}<input type="file" id="import-file" accept=".json,application/json" style="display:none"></label><button class="btn pri" data-act="reset">${E(t('reset'))}</button></div></div>`}};
+
+function render(){
+const u=me();document.documentElement.lang=LANG;document.documentElement.dataset.theme=TH;
+const af=document.activeElement,fid=af&&af.id,fs=af&&af.selectionStart;
+const unread=u?S.threads.filter(x=>x.ids.includes(u.id)).reduce((a,x)=>a+(x.unread[u.id]||0),0):0;
+const pend=u?S.gear.filter(g=>g.ownerId===u.id&&g.st==='Pending').length:0;
+const NAV=[['dashboard','nd',0],['gear','ng',pend],['tutors','nt',0],['vault','nv',0],['chat','nc',unread],['settings','ns',0]];
+$('sidebar').innerHTML=`<div class="brand"><span class="mark">S</span><b>SpartanSync</b></div><div class="campus">BSU – The National Engineering University<br>Alangilan Campus<div class="mono" style="font-size:11px">COE · CAFAD · CICS · CET</div></div>
+<div class="nav">${NAV.map(([id,k,c])=>`<button class="nb ${UI.v===id?'on':''}" data-act="nav" data-id="${id}"><span>${E(t(k))}</span>${c?`<span class="mono">${c}</span>`:''}</button>`).join('')}</div>
+<div class="foot"><button class="btn" data-act="theme">${E(TH==='dark'?t('light'):t('dark'))}</button><button class="ubox" data-act="auth"><span class="av">${u?E(initials(u.name)):'BS'}</span><span><b style="display:block;font-size:13px">${u?E(u.name):'—'}</b><span class="mono sm mu">${u?E(u.sr+' · '+u.college+' · '+u.program):E(t('login'))}</span></span></button></div>`;
+$('mnav').innerHTML=NAV.map(([id,k])=>`<button class="${UI.v===id?'on':''}" data-act="nav" data-id="${id}">${E(t(k))}</button>`).join('');
+$('top').innerHTML=`<h1>${E(t(NAV.find(n=>n[0]===UI.v)[1]))}</h1><div class="top-meta sm mu">${u?`<span class="mono"><b>${E(u.college)}</b> · ${E(u.program)} · ${E(u.sr)}</span> · ${E(u.year)}`:''}</div>
+<div class="row"><select class="btn" id="top-lang" aria-label="${E(t('lang'))}">${LANGS.map(([c,l])=>`<option value="${c}" ${c===LANG?'selected':''}>${c.toUpperCase()} · ${l}</option>`).join('')}</select><button class="btn" data-act="theme" aria-label="${E(t('theme'))}">◐</button><button class="btn pri" data-act="auth">${E(t('login'))}</button></div>`;
+$('main').innerHTML=u?VIEW[UI.v](u):`<div class="box" style="max-width:520px;margin:40px auto;text-align:center"><h2>${E(t('gate'))}</h2><p class="mu">Batangas State University – The National Engineering University (Alangilan Campus)</p><button class="btn pri" data-act="auth">${E(t('login'))}</button></div>`;
+renderModal();
+const ms=$('msgs');if(ms)ms.scrollTop=ms.scrollHeight;
+if(fid&&$(fid)&&/INPUT|TEXTAREA/.test($(fid).tagName)&&$(fid).type!=='file'){$(fid).focus();try{$(fid).setSelectionRange(fs,fs)}catch{}}}
+
+function renderModal(){
+const m=$('modal'),u=me();
+if(UI.reader){const v=S.vault.find(x=>x.id===UI.reader);
+if(v&&u){const ext=safeUrl(v.url);m.className='on';
+m.innerHTML=`<div class="mc"><div class="row sb"><div><span class="mono sm mu">${E(v.college)} · ${E(v.code)} · ${E(v.type)}</span><h2>${E(v.title)}</h2></div><button class="btn" data-act="close">${E(t('close'))}</button></div>
+<div id="ps" style="background:var(--bg);border:1px solid var(--bd);padding:16px;margin:16px 0"><pre class="mono" style="white-space:pre-wrap;margin:0;font-size:12px;line-height:1.7;overflow-wrap:anywhere">${E(v.body)}</pre>${ext?`<div class="cf"><a href="${E(ext)}" target="_blank" rel="noopener noreferrer" style="color:var(--ac);font-weight:600;font-size:12px">${E(ext)}</a></div>`:''}</div>
+<div class="row sb"><div class="row"><button class="btn ${v.up.includes(u.id)?'pri':''}" data-act="up" data-id="${E(v.id)}">▲ ${v.up.length}</button><button class="btn ${v.saved.includes(u.id)?'pri':''}" data-act="bm" data-id="${E(v.id)}">${E(v.saved.includes(u.id)?t('saved'):t('save'))}</button></div>
+<div class="row"><button class="btn" data-act="print">${E(t('print'))}</button><button class="btn pri" data-act="dl">${E(t('dl'))}</button></div></div></div>`;return}
+UI.reader=null}
+if(!UI.modal){m.className='';m.innerHTML='';return}
+m.className='on';
+m.innerHTML=`<div class="mc"><div class="row sb"><h2>${E(t('login'))}</h2><button class="btn" data-act="close">${E(t('close'))}</button></div>
+<div class="row cf" style="margin:12px 0 14px;border-top:0;padding-top:0">${[['switch','1-Click Switch'],['signin','Sign In'],['reg','Register']].map(([k,l])=>`<button class="btn ${UI.tab===k?'pri':''}" data-act="atab" data-id="${k}">${l}</button>`).join('')}</div>
+${UI.tab==='switch'?`<div class="dl" style="border:1px solid var(--bd);padding:0 12px">${S.profiles.map(p=>`<div class="row sb"><div><b>${E(p.name)}</b> <span class="mono ac">${E(p.college)}</span>${p.nat?` <span class="sm mu">· ${E(p.nat)}</span>`:''}<div class="mono sm mu">${E(p.sr)} · ${E(p.program)} · ${E(p.year)}</div></div>${u&&u.id===p.id?'<span class="ok">Active</span>':`<button class="btn" data-act="sw" data-id="${E(p.id)}">Switch</button>`}</div>`).join('')}</div>${u?`<div class="row sb" style="margin-top:12px"><button class="btn" data-act="logout">${E(t('logout'))}</button></div>`:''}`
+:UI.tab==='signin'?`<div class="g2"><input class="in mono" id="li-sr" placeholder="SR-Code (e.g. 23-04192)" maxlength="8" autocomplete="username"><input class="in mono" id="li-pin" type="password" placeholder="PIN / Password" autocomplete="current-password"></div><p class="sm mu">Seeded accounts use PIN 1234.</p><button class="btn pri" data-act="signin">Sign In</button>`
+:`<div class="g2"><input class="in" id="r-name" placeholder="Full Name" maxlength="60"><input class="in mono" id="r-sr" placeholder="SR-Code (XX-XXXXX)" maxlength="8"><input class="in mono" id="r-pin" type="password" placeholder="PIN / Password (4+ chars)" autocomplete="new-password"><select class="in" id="r-col" aria-label="College">${colOpts('COE')}</select><select class="in" id="r-prog" aria-label="Program">${progOpts('COE')}</select><select class="in" id="r-yr" aria-label="Year">${YEARS.map(y=>`<option>${y}</option>`).join('')}</select></div><div style="margin-top:12px"><button class="btn pri" data-act="reg">Create & Sign In</button></div>`}</div>`}
+
+/* ---------- Actions ---------- */
+const owns=(c,id)=>c.find(x=>x.id===id);
+const ACTS={
+nav(id){UI.v=id;UI.q='';UI.col='All';UI.st='All';UI.form=null;UI.peer=false;render();scrollTo(0,0)},
+lang(id){if(!D[id])return;LANG=id;ls.set(LK,id);render()},
+theme(){TH=TH==='dark'?'light':'dark';applyTheme();render()},
+settheme(id){TH=id;applyTheme();render()},
+atab(id){UI.tab=id;render()},auth(){UI.modal=true;render()},
+close(){UI.modal=false;UI.reader=null;render()},
+sw(id){setUser(id);UI.modal=false;UI.tid=null;toast('Switched to '+prof(id).name);render()},
+logout(){setUser(null);UI.modal=false;toast('Logged out');render()},
+reset(){if(Date.now()-UI.rc>4000){UI.rc=Date.now();return toast('Tap Reset again to confirm')}
+UI.rc=0;S=seed();setUser(S.lastUser);UI.modal=false;UI.tid=null;save();toast('Campus data reset');render()},
+export(){dlBlob(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),'spartansync-state.json');toast('Exported JSON')},
+signin(){const f=S.profiles.find(p=>p.sr===val('li-sr')&&p.pin===val('li-pin'));if(!f)return toast('Invalid SR-Code or PIN');setUser(f.id);UI.modal=false;toast('Signed in as '+f.name);render()},
+reg(){const name=val('r-name'),sr=val('r-sr'),pin=val('r-pin');
+if(!name||!SRX.test(sr)||pin.length<4)return toast('Enter name, SR-Code (XX-XXXXX) and a 4+ character PIN');
+if(S.profiles.some(p=>p.sr===sr))return toast('That SR-Code is already registered');
+const p={id:'stu-'+Date.now(),name,sr,pin,college:val('r-col'),program:val('r-prog'),year:val('r-yr'),nat:'',bio:'',help:''};
+S.profiles.unshift(p);setUser(p.id);UI.modal=false;toast('Welcome, '+name);render()},
+setsave(){const u=me(),name=val('s-name'),sr=val('s-sr');if(!name||!SRX.test(sr))return toast('Enter a valid name and SR-Code (XX-XXXXX)');
+if(S.profiles.some(p=>p.sr===sr&&p.id!==u.id))return toast('That SR-Code is already registered');
+Object.assign(u,{name,sr,college:val('s-col'),program:val('s-prog'),year:val('s-yr'),help:val('s-help'),bio:val('s-bio')});save();toast('Profile saved');render()},
+dgear(){UI.q=val('dash-q');UI.v='gear';UI.col='All';render()},dtutor(){UI.q=val('dash-q');UI.v='tutors';UI.col='All';render()},
+col(id){UI.col=id;render()},st(id){UI.st=id;render()},
+form(id){UI.form=UI.form===id?null:id;const f=$('form-'+id);if(f)f.style.display=UI.form===id?'block':'none'},
+gsave(){const u=me(),name=val('gf-name'),dur=Number(val('gf-dur'));if(!name)return toast('Enter the item name');if(!(dur>=1&&dur<=72))return toast('Duration must be 1–72 hours');
+S.gear.unshift({id:'g'+Date.now(),name,college:val('gf-col'),code:val('gf-code').toUpperCase(),urg:$('gf-urg').value,ownerId:u.id,borrowerId:null,zone:val('gf-zone'),cond:val('gf-cond')||'BSU ID check on handoff.',st:'Available',dur,dueAt:0});UI.form=null;save();toast('Gear listed');render()},
+borrow(id){const u=me(),g=owns(S.gear,id);if(!g||g.st!=='Available'||g.ownerId===u.id)return;
+g.st='Pending';g.borrowerId=u.id;const th=thread(g.ownerId,`${g.name} · ${g.zone}`);post(th,`Hi! I’d like to borrow “${g.name}” for ${g.dur}h at ${g.zone}.`);UI.tid=th.id;UI.v='chat';save();toast('Borrow requested — chat opened');render()},
+approve(id){const u=me(),g=owns(S.gear,id);if(!g||g.ownerId!==u.id||g.st!=='Pending')return;
+g.st='Borrowed';g.dueAt=Date.now()+g.dur*36e5;const th=thread(g.borrowerId,`${g.name} · ${g.zone}`);if(th)post(th,`Approved! Meet at ${g.zone}. Please return within ${g.dur}h.`);save();toast('Approved — timer started');render()},
+decline(id){const u=me(),g=owns(S.gear,id);if(!g||g.ownerId!==u.id)return;const th=thread(g.borrowerId,`${g.name} · ${g.zone}`);if(th)post(th,`Sorry, I can’t lend “${g.name}” right now.`);g.st='Available';g.borrowerId=null;g.dueAt=0;save();toast('Request declined');render()},
+ret(id){const u=me(),g=owns(S.gear,id);if(!g||g.ownerId!==u.id)return;const th=thread(g.borrowerId,`${g.name} · ${g.zone}`);if(th)post(th,`Marked as returned: “${g.name}”. Thank you!`);g.st='Available';g.borrowerId=null;g.dueAt=0;save();toast('Marked returned');render()},
+gdel(id){const g=owns(S.gear,id);if(!g||g.ownerId!==UID||g.st!=='Available')return;S.gear=S.gear.filter(x=>x.id!==id);save();toast('Listing deleted');render()},
+tsave(){const u=me(),code=val('tf-code').toUpperCase(),subj=val('tf-subj');if(!code||!subj)return toast('Enter the subject code and topic');
+S.tutors.unshift({id:'t'+Date.now(),kind:$('tf-kind').value,college:val('tf-col'),code,subj,desc:val('tf-desc')||subj,authorId:u.id,sched:val('tf-sched')||'Flexible',zone:val('tf-zone'),st:'Open',joined:[]});UI.form=null;save();toast('Published');render()},
+help(id){const u=me(),x=owns(S.tutors,id);if(!x||x.authorId===u.id||x.joined.includes(u.id))return;
+if(x.kind!=='Group Study'&&x.st!=='Open')return toast('Already matched');
+x.st='Matched';x.joined.push(u.id);const th=thread(x.authorId,`${x.code} · ${x.zone}`);post(th,`Hi! I can help / join for ${x.code}: ${x.subj}.`);UI.tid=th.id;UI.v='chat';save();toast('Matched — chat opened');render()},
+vsave(){const u=me(),code=val('vf-code').toUpperCase(),title=val('vf-title'),sum=val('vf-sum'),body=val('vf-body'),url=val('vf-url');
+if(!code||!title||!sum||!body)return toast('Fill in code, title, summary and content');if(url&&!safeUrl(url))return toast('Link must start with http:// or https://');
+S.vault.unshift({id:'v'+Date.now(),college:val('vf-col'),code,type:$('vf-type').value,title,authorId:u.id,sum,body,url:url||'',up:[u.id],saved:[]});UI.form=null;save();toast('Uploaded');render()},
+read(id){if(owns(S.vault,id)){UI.reader=id;render()}},print(){window.print()},
+dl(){const v=owns(S.vault,UI.reader);if(!v)return;dlBlob(new Blob([`${v.title}\n${v.college} · ${v.code} · ${v.type}\n${'='.repeat(44)}\n\n${v.body}\n`],{type:'text/plain;charset=utf-8'}),`${v.code.replace(/\s+/g,'')}_${v.title.replace(/[^\w]+/g,'_').slice(0,32)}.txt`);toast('Downloaded .txt')},
+up(id){const v=owns(S.vault,id);if(!v)return;const i=v.up.indexOf(UID);i>=0?v.up.splice(i,1):v.up.push(UID);save();render()},
+bm(id){const v=owns(S.vault,id);if(!v)return;const i=v.saved.indexOf(UID);i>=0?v.saved.splice(i,1):v.saved.push(UID);save();render()},
+peer(){UI.peer=!UI.peer;render()},
+newth(id){const th=thread(id,'Direct Campus Chat');if(th){UI.tid=th.id;UI.peer=false;save();render()}},
+th(id){UI.tid=id;UI.reply=null;UI.draft='';render()},
+chip(id){const th=owns(S.threads,UI.tid);if(!th)return;post(th,id);save();render()},
+send(){const th=owns(S.threads,UI.tid),txt=($('chat-in')||{}).value;if(!th||!txt||!txt.trim())return;
+const r=UI.reply!=null?th.msgs[UI.reply]:null;post(th,txt.trim(),r?{n:r.sid===UID?'You':(prof(r.sid)||{}).name||'Peer',t:String(r.txt).slice(0,80)}:null);UI.draft='';UI.reply=null;save();render();const i=$('chat-in');if(i)i.focus()},
+rp(id){UI.reply=Number(id);render();const i=$('chat-in');if(i)i.focus()},rpx(){UI.reply=null;render()},
+rx(id,b){const th=owns(S.threads,UI.tid),m=th&&th.msgs[Number(id)];if(!m)return;const em=b.dataset.em;
+if(!m.rx||typeof m.rx!=='object'||Array.isArray(m.rx))m.rx={};const a=A(m.rx[em]),i=a.indexOf(UID);i>=0?a.splice(i,1):a.push(UID);m.rx[em]=a;save();render()}};
+
+document.addEventListener('click',ev=>{
+if(ev.target.id==='modal'){ACTS.close();return}
+const b=ev.target.closest('[data-act]');if(!b)return;const f=ACTS[b.dataset.act];if(f)f(b.dataset.id,b)});
+document.addEventListener('input',ev=>{const id=ev.target.id;
+if(id==='srch'){UI.q=ev.target.value;const r=$('results');if(r&&me())r.innerHTML=UI.v==='gear'?gearList():UI.v==='tutors'?tutorList():vaultList()}
+else if(id==='chat-in')UI.draft=ev.target.value});
+document.addEventListener('keydown',ev=>{
+if(ev.key==='Enter'&&ev.target.id==='chat-in'&&!ev.isComposing){ev.preventDefault();ACTS.send()}
+else if(ev.key==='Escape'&&(UI.modal||UI.reader))ACTS.close()});
+document.addEventListener('change',ev=>{const el=ev.target;
+if(el.id==='top-lang')ACTS.lang(el.value);
+else if(el.id==='r-col'||el.id==='s-col'){const p=$(el.id==='r-col'?'r-prog':'s-prog');if(p)p.innerHTML=progOpts(el.value)}
+else if(el.id==='import-file'&&el.files[0]){const rd=new FileReader();rd.onload=()=>{try{const c=clean(JSON.parse(rd.result));if(!c)throw 0;S=c;if(!prof(UID))setUser(S.lastUser&&prof(S.lastUser)?S.lastUser:S.profiles[0].id);save();toast('Imported backup');render()}catch{toast('Invalid JSON backup')}};rd.readAsText(el.files[0]);el.value=''}});
+
+/* Cross-tab sync: shared campus data, per-tab login session */
+window.addEventListener('storage',ev=>{
+if(ev.key===KEY&&ev.newValue){try{const c=clean(JSON.parse(ev.newValue));if(c){S=c;if(UID&&!prof(UID))UID=null;render()}}catch{}}
+else if(ev.key===TK&&ev.newValue){TH=ev.newValue;render()}
+else if(ev.key===LK&&D[ev.newValue]){LANG=ev.newValue;render()}});
+
+/* Live countdown ticker */
+setInterval(()=>document.querySelectorAll('[data-due]').forEach(el=>{
+const d=Number(el.dataset.due)-Date.now(),od=d<=0;el.textContent=(od?t('over')+' +':'')+hms(d);el.classList.toggle('od',od)}),1000);
+
+if(UID&&!prof(UID))UID=null;
+applyTheme();render();
+</script>
+</body>
+</html>
